@@ -21,19 +21,15 @@ def generate_txt_data() -> str:
 # Значения - или целое число в диапазоне от -100 до 100, или число типа float в диапазоне от 0 до 1,
 # или True/False. Выбор значения должен быть равновероятным. Т.е. вероятность того, что значение будет целым
 # такая же, как и вероятность того, что будет типа float или типа bool.
+def create_key():
+    key = "".join([random.choice(ascii_lowercase) for _ in range(5)])
+    return key
+def create_value():
+    value = random.choice([random.randint(-100, 100), random.random(), random.choice([True,False])])
+    return value
 def generate_json_data():
     num_of_keys = random.randint(5,20)
-
-    def create_key():
-        key = "".join([random.choice(ascii_lowercase) for _ in range(5)])
-        return key
-
-    def create_value():
-        value = random.choice([random.randint(-100, 100), random.random(), random.choice([True,False])])
-        return value
-
     my_dict = {create_key():create_value() for _ in range(num_of_keys)}
-
     return my_dict
 
 # Функция generate_and_write_file. Написать функцию которая принимает один параметр - полный путь к файлу.
@@ -41,14 +37,13 @@ def generate_json_data():
 # Если расширение не соответствует заданным, то вывести текст "Unsupported file format"
 
 def generate_and_write_file(path):
-    if os.path.splitext(path)[-1] == ".txt":
-        with open(path, "w") as file:
+    with open(path, "w") as file:
+        if os.path.splitext(path)[-1] == ".txt":
             file.write(generate_txt_data())
 
-    elif os.path.splitext(path)[-1] == ".json":
-        with open(path, "w") as file:
-            file.write(json.dumps(generate_json_data()))
+        elif os.path.splitext(path)[-1] == ".json":
+            json.dump(generate_json_data())
 
-    else:
-        print("Unsupported file format")
+        else:
+            print("Unsupported file format")
 # Разрешается создавать дополнительные (вспомогательные) функции.
